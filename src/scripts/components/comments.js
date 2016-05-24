@@ -3,7 +3,6 @@
 import $        from 'jquery';
 import Backbone from 'backbone';
 
-
 export default Backbone.View.extend({
   el: '.js-Comments',
 
@@ -19,6 +18,8 @@ export default Backbone.View.extend({
   initialize: function(issueId) {
     this.issue = issueId;
 
+    $('.js-Comments-issueId').text(this.issue);
+
     this.getComments();
   },
 
@@ -30,6 +31,7 @@ export default Backbone.View.extend({
       that.comments = res;
       that.displayComments(that.comments);
       that.displayFilters();
+      that.initChart();
     });
   },
 
@@ -56,7 +58,6 @@ export default Backbone.View.extend({
 
   displayFilters: function() {
     var that = this;
-    console.log(that.users)
     that.users.forEach( (value) => {
       that.createFilter(value);
     });
@@ -78,9 +79,40 @@ export default Backbone.View.extend({
     } else {
       $(`.js-item${input.val()}`).removeClass('tt-Comments-item--hidden');
     }
+
+    this.drawChart();
+  },
+
+  formatData4Chart: function() {
+    var data = [];
+    var that = this;
+    data.push(['Name', 'Comments length']);
+    that.users.forEach(function(user, index) {
+      data.push([user.login, 0]);
+      that.comments.forEach(function(comment) {
+        if(user.id == comment.user.id && $(`#filter-${comment.user.id}`).is(':checked')) {
+          data[index+1][1] += comment.body.length;
+        }
+      });
+    });
+
+    return data
+  },
+
+  initChart: function() {
+    var that = this;
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable(that.formatData4Chart());
+      var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+      chart.draw(data);
+    }
   },
 
   toggleSidebar: function() {
     $('.js-sidebar').toggleClass('tt-Comments-sidebar--show');
-  }
+  },
 });

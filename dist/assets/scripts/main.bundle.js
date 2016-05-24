@@ -14531,6 +14531,8 @@ exports['default'] = _backbone2['default'].View.extend({
   initialize: function initialize(issueId) {
     this.issue = issueId;
 
+    (0, _jquery2['default'])('.js-Comments-issueId').text(this.issue);
+
     this.getComments();
   },
 
@@ -14542,6 +14544,7 @@ exports['default'] = _backbone2['default'].View.extend({
       that.comments = res;
       that.displayComments(that.comments);
       that.displayFilters();
+      that.initChart();
     });
   },
 
@@ -14563,7 +14566,6 @@ exports['default'] = _backbone2['default'].View.extend({
 
   displayFilters: function displayFilters() {
     var that = this;
-    console.log(that.users);
     that.users.forEach(function (value) {
       that.createFilter(value);
     });
@@ -14579,6 +14581,37 @@ exports['default'] = _backbone2['default'].View.extend({
       (0, _jquery2['default'])('.js-item' + input.val()).addClass('tt-Comments-item--hidden');
     } else {
       (0, _jquery2['default'])('.js-item' + input.val()).removeClass('tt-Comments-item--hidden');
+    }
+
+    this.drawChart();
+  },
+
+  formatData4Chart: function formatData4Chart() {
+    var data = [];
+    var that = this;
+    data.push(['Name', 'Comments length']);
+    that.users.forEach(function (user, index) {
+      data.push([user.login, 0]);
+      that.comments.forEach(function (comment) {
+        if (user.id == comment.user.id && (0, _jquery2['default'])('#filter-' + comment.user.id).is(':checked')) {
+          data[index + 1][1] += comment.body.length;
+        }
+      });
+    });
+
+    return data;
+  },
+
+  initChart: function initChart() {
+    var that = this;
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable(that.formatData4Chart());
+      var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+      chart.draw(data);
     }
   },
 
