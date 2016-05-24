@@ -2,13 +2,33 @@
 }
 
 .tt-Comments-header {
+  position: relative;
 	padding: calc(20rem/16) calc(50rem/16);
 	background: #313b44;
+  @media (max-width: 1023px) {
+    padding-left: calc(20rem/16);
+    padding-right: calc(20rem/16);
+  }
+}
+
+.tt-Comments-burger {
+  position: absolute;
+  left: calc(20rem/16);
+  top: 50%;
+  vertical-align: middle;
+  background: transparent;
+  transform: translateY(-50%);
 }
 
 .tt-Comments-title {
 	font-size: calc(36rem/16);
 	color: #fff;
+
+  @media (max-width: 1023px) {
+    padding: 0 calc(40rem/16);
+    font-size: calc(24rem/16);
+    text-align: center;
+  }
 }
 
 .tt-Comments-main {
@@ -24,12 +44,35 @@
 
 .tt-Comments-sidebar {
   width: 33.3333333%;
+  padding: calc(20rem/16) calc(50rem/16);
   background: #fff;
   border-right: 2px solid #d2dce4;
 
   @media (max-width: 1023px) {
-    display: none;
+    visibility: hidden;
+    position: fixed;
+    width: 90%;
+    z-index: 1000;
+    height: 100%;
+    transform: translateX(-90%);
+    transition: all 0.3s linear;
   }
+}
+
+.tt-Comments-sidebar--show {
+  @media (max-width: 1023px) {
+    visibility: visible;
+    transform: translateX(0);
+  }
+}
+
+.tt-Comments-sidebarTitle {
+  margin: 0 0 calc(20rem/16);
+  font-size: calc(24rem/16);
+}
+
+.tt-Comments-filter {
+  margin: calc(10rem/16) 0;
 }
 
 .tt-Comments-list {
@@ -39,6 +82,7 @@
 
   @media (max-width: 1023px) {
     width: 100%;
+    padding: 1px calc(20rem/16);
   }
 }
 
@@ -73,6 +117,10 @@
   }
 }
 
+.tt-Comments-item--hidden {
+  display: none;
+}
+
 .tt-Comments-img {
   float: left;
 	width: calc(65rem/16);
@@ -84,6 +132,7 @@
   position: relative;
   margin: 0 0 0 calc(85rem/16);
   padding: calc(15rem/16);
+  overflow: hidden;
   background: #f3fcff;
   border-radius: calc(5rem/16);
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);

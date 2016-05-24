@@ -157,12 +157,34 @@ button {
   outline-style: none;
 }
 .tt-Comments-header {
+  position: relative;
   padding: calc(1.25rem) calc(3.125rem);
   background: #313b44;
+}
+@media (max-width: 1023px) {
+  .tt-Comments-header {
+    padding-left: calc(1.25rem);
+    padding-right: calc(1.25rem);
+  }
+}
+.tt-Comments-burger {
+  position: absolute;
+  left: calc(1.25rem);
+  top: 50%;
+  vertical-align: middle;
+  background: transparent;
+  transform: translateY(-50%);
 }
 .tt-Comments-title {
   font-size: calc(2.25rem);
   color: #fff;
+}
+@media (max-width: 1023px) {
+  .tt-Comments-title {
+    padding: 0 calc(2.5rem);
+    font-size: calc(1.5rem);
+    text-align: center;
+  }
 }
 .tt-Comments-main {
   display: table;
@@ -175,13 +197,33 @@ button {
 }
 .tt-Comments-sidebar {
   width: 33.3333333%;
+  padding: calc(1.25rem) calc(3.125rem);
   background: #fff;
   border-right: 2px solid #d2dce4;
 }
 @media (max-width: 1023px) {
   .tt-Comments-sidebar {
-    display: none;
+    visibility: hidden;
+    position: fixed;
+    width: 90%;
+    z-index: 1000;
+    height: 100%;
+    transform: translateX(-90%);
+    transition: all 0.3s linear;
   }
+}
+@media (max-width: 1023px) {
+  .tt-Comments-sidebar--show {
+    visibility: visible;
+    transform: translateX(0);
+  }
+}
+.tt-Comments-sidebarTitle {
+  margin: 0 0 calc(1.25rem);
+  font-size: calc(1.5rem);
+}
+.tt-Comments-filter {
+  margin: calc(0.625rem) 0;
 }
 .tt-Comments-list {
   width: 66.6666666%;
@@ -191,6 +233,7 @@ button {
 @media (max-width: 1023px) {
   .tt-Comments-list {
     width: 100%;
+    padding: 1px calc(1.25rem);
   }
 }
 .tt-Comments-item {
@@ -216,6 +259,9 @@ button {
   right: calc(-1.875rem);
   border-color: transparent transparent transparent #fff;
 }
+.tt-Comments-item--hidden {
+  display: none;
+}
 .tt-Comments-img {
   float: left;
   width: calc(4.0625rem);
@@ -226,6 +272,7 @@ button {
   position: relative;
   margin: 0 0 0 calc(5.3125rem);
   padding: calc(0.9375rem);
+  overflow: hidden;
   background: #f3fcff;
   border-radius: calc(0.3125rem);
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);

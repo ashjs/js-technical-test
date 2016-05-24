@@ -12,12 +12,16 @@ html
   body
     .tt-Comments.js-Comments
       header.tt-Comments-header
+        button.tt-Comments-burger.tt-hiddenDesktop.js-toggleSidebar(type='button')
+          img(src='assets/images/menu-burger.png')
         h1.tt-Comments-title
           | Missing or truncated error message
           span.js-Comments-issueId
 
       section.tt-Comments-main
         aside.tt-Comments-sidebar.js-sidebar
+          h2.tt-Comments-sidebarTitle Filtrer par auteur
+          ul.tt-Comments-filters.js-filtersList
 
         ul.tt-Comments-list.js-commentsList
 

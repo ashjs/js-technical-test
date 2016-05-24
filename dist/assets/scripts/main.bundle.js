@@ -14519,10 +14519,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : {'de
 exports['default'] = _backbone2['default'].View.extend({
   el: '.js-Comments',
 
-  events: {},
+  events: {
+    'change .js-filterComments': 'filterComments',
+    'click .js-toggleSidebar': 'toggleSidebar'
+  },
 
   issue: '',
   comments: [],
+  users: [],
 
   initialize: function initialize(issueId) {
     this.issue = issueId;
@@ -14537,18 +14541,49 @@ exports['default'] = _backbone2['default'].View.extend({
     }).done(function (res) {
       that.comments = res;
       that.displayComments(that.comments);
+      that.displayFilters();
     });
   },
 
   displayComments: function displayComments(comments) {
     var that = this;
+    var userTmp = [];
     comments.forEach(function (value) {
+      if (_jquery2['default'].inArray(value.user.id, userTmp) === -1) {
+        userTmp.push(value.user.id);
+        that.users.push(value.user);
+      }
       that.createComment(value);
     });
   },
 
   createComment: function createComment(comment) {
-    (0, _jquery2['default'])('.js-commentsList').append('\n        <li class="tt-Comments-item">\n          <img src="' + comment.user.avatar_url + '" class="tt-Comments-img" />\n          <p class="tt-Comments-bubble">' + comment.body + '</p>\n        </li>\n      ');
+    this.$('.js-commentsList').append('\n        <li class="tt-Comments-item js-item' + comment.user.id + '">\n          <img src="' + comment.user.avatar_url + '" class="tt-Comments-img" />\n          <p class="tt-Comments-bubble">' + comment.body + '</p>\n        </li>\n      ');
+  },
+
+  displayFilters: function displayFilters() {
+    var that = this;
+    console.log(that.users);
+    that.users.forEach(function (value) {
+      that.createFilter(value);
+    });
+  },
+
+  createFilter: function createFilter(user) {
+    this.$('.js-filtersList').append('\n        <li class="tt-Comments-filter">\n          <input class="tt-Input-checkbox js-filterComments" type="checkbox" id="filter-' + user.id + '" name="filter-' + user.id + '" value="' + user.id + '" checked="checked" />\n          <label for="filter-' + user.id + '">' + user.login + '</label>\n        </li>\n      ');
+  },
+
+  filterComments: function filterComments(evt) {
+    var input = (0, _jquery2['default'])(evt.currentTarget);
+    if (!input.is(':checked')) {
+      (0, _jquery2['default'])('.js-item' + input.val()).addClass('tt-Comments-item--hidden');
+    } else {
+      (0, _jquery2['default'])('.js-item' + input.val()).removeClass('tt-Comments-item--hidden');
+    }
+  },
+
+  toggleSidebar: function toggleSidebar() {
+    (0, _jquery2['default'])('.js-sidebar').toggleClass('tt-Comments-sidebar--show');
   }
 });
 
